@@ -14,7 +14,7 @@ import { OpenApiHttpParams, QueryParamStyle, concatHttpParamsObject} from './que
 
 export class BaseService {
     protected basePath = 'http://localhost:8080';
-    public defaultHeaders = new HttpHeaders();
+    public defaultHeaders = new HttpHeaders(); 
     public configuration: Configuration;
     public encoder: HttpParameterCodec;
 
