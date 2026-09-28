@@ -24,7 +24,9 @@ jobs:
       # 2. Copia o openapi.json da pasta contracts/ para o local onde o front-end lê o contrato
       - name: Atualizar openapi.json local com a versão mais recente
         run: |
-          # Certifique-se de alterar o destino final './src/api/openapi.json' para o caminho onde seu projeto espera o arquivo
+          # Cria a pasta de destino caso ela não exista
+          mkdir -p ./src/api
+          # Copia o contrato para o local correto
           cp temp-docs/contracts/openapi.json ./src/api/openapi.json
 
       - name: Configurar Node.js
