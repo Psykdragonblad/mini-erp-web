@@ -71,33 +71,27 @@ export class App implements OnInit {
   }
 
   carregarProdutos() {
-    this.produtoService.listar('body', false, { httpHeaderAccept: 'application/json' }).subscribe({
+    // ANTES (provavelmente com algum argumento extra que quebrou)
+    // DEPOIS (forma limpa padrão):
+    this.produtoService.listar('body', false).subscribe({
       next: (dados) => {
-        if (Array.isArray(dados)) {
-          this.produtos = dados;
-        } else {
-          this.produtos = [];
-        }
+        console.log('Dados recebidos com sucesso:', dados);
+        this.produtos = dados;
         this.cdr.detectChanges();
       },
-      error: (err) => {
-        console.error('Erro ao buscar produtos:', err);
-      }
+      error: (err) => console.error(err)
     });
   }
 
   salvarProduto() {
-    this.produtoService.criar(this.novoProduto, 'body', false, { httpHeaderAccept: 'application/json' }).subscribe({
+    // ANTES (com o objeto options ou observe incorreto)
+    // DEPOIS (forma limpa padrão):
+    this.produtoService.criar(this.novoProduto).subscribe({
       next: (produtoCriado) => {
-        console.log('Produto cadastrado com sucesso:', produtoCriado);
-        // Limpa o formulário
-        this.novoProduto = { nome: '', preco: 0, quantidadeEstoque: 0 };
-        // Recarrega a lista para exibir o novo item
-        this.carregarProdutos();
+        console.log('Produto criado com sucesso!', produtoCriado);
+        this.carregarProdutos(); // Atualiza a lista
       },
-      error: (err) => {
-        console.error('Erro ao cadastrar produto:', err);
-      }
+      error: (err) => console.error(err)
     });
   }
 }
