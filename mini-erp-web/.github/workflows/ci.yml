@@ -1,0 +1,43 @@
+name: Front-End CI (Contract & Build Validation)
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build-and-validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do Front-end
+        uses: actions/checkout@v4
+
+      # 1. Baixa o repositório mini-erp-docs para uma pasta temporária
+      - name: Checkout do Repositório de Contratos
+        uses: actions/checkout@v4
+        with:
+          repository: 'Psykdragonblad/mini-erp-docs'
+          path: temp-docs
+
+      # 2. Copia o openapi.json da pasta contracts/ para o local onde o front-end lê o contrato
+      - name: Atualizar openapi.json local com a versão mais recente
+        run: |
+          # Certifique-se de alterar o destino final './src/api/openapi.json' para o caminho onde seu projeto espera o arquivo
+          cp temp-docs/contracts/openapi.json ./src/api/openapi.json
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Instalar Dependências
+        run: npm ci
+
+      - name: Gerar Cliente OpenAPI (Validação de Contrato)
+        run: npm run openapi:generate # Comando responsável por atualizar os models e services
+
+      - name: Compilar o Projeto Angular (Validar Tipagem)
+        run: npm run build -- --configuration production
