@@ -77,7 +77,7 @@ export class App implements OnInit {
       next: (dados) => {
         console.log('Dados recebidos com sucesso:', dados);
         this.produtos = dados;
-        this.cdr.detectChanges(); 
+        this.cdr.detectChanges();
       },
       error: (err) => console.error(err)
     });
