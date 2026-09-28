@@ -21,25 +21,27 @@ jobs:
           repository: 'Psykdragonblad/mini-erp-docs'
           path: temp-docs
 
-      # 2. Copia o openapi.json da pasta contracts/ para o local onde o front-end lê o contrato
+      # 2. Copia o openapi.json para o diretório correto do projeto
       - name: Atualizar openapi.json local com a versão mais recente
         run: |
-          # Cria a pasta de destino caso ela não exista
-          mkdir -p ./src/api
-          # Copia o contrato para o local correto
-          cp temp-docs/contracts/openapi.json ./src/api/openapi.json
+          mkdir -p ./mini-erp-web/src/api
+          cp temp-docs/contracts/openapi.json ./mini-erp-web/src/api/openapi.json
 
       - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
+          cache-dependency-path: ./mini-erp-web/package-lock.json
 
       - name: Instalar Dependências
         run: npm ci
+        working-directory: ./mini-erp-web
 
       - name: Gerar Cliente OpenAPI (Validação de Contrato)
-        run: npm run openapi:generate # Comando responsável por atualizar os models e services
+        run: npm run openapi:generate
+        working-directory: ./mini-erp-web
 
       - name: Compilar o Projeto Angular (Validar Tipagem)
         run: npm run build -- --configuration production
+        working-directory: ./mini-erp-web
