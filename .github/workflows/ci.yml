@@ -35,7 +35,7 @@ jobs:
           cache-dependency-path: ./mini-erp-web/package-lock.json
 
       - name: Instalar Dependências
-        run: npm ci
+        run: npm install
         working-directory: ./mini-erp-web
 
       - name: Gerar Cliente OpenAPI (Validação de Contrato)
